@@ -36,6 +36,12 @@ const index: FunctionComponent<Iindex> = ({}) => {
     )
 }
 
+export const getServerSideProps = () => {
+    return {
+        props: {},
+    }
+}
+
 const Container = styled.div`
     display: flex;
     justify-content: center;
