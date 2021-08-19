@@ -22,6 +22,8 @@ export const signUp = async (email: string, password: string): Promise<ISignUpRe
             password: password,
             avatar: 'NO_AVATAR',
             bgColor: 'DEFAULT',
+            channelType: 'STANDARD',
+            channelLatencyMode: 'LOW',
         }),
     }
 
@@ -57,25 +59,27 @@ export const signIn = async (email: string, password: string): Promise<any> => {
 
 export const getUser = async (): Promise<any> => {
     const accessToken = getWithExpiry('session')
-    if (accessToken && JSON.parse(accessToken).value && JSON.parse(accessToken).value.AuthenticationResult) {
-        console.log(JSON.parse(accessToken))
-        const url = `${baseUrl}user?access_token=${encodeURIComponent(
-            JSON.parse(accessToken).value.AuthenticationResult.AccessToken,
-        )}`
-
-        // const options = {
-        //     headers: {
-        //         Authorization: `Bearer ${accessToken}`,
-        //     },
-        //     method: 'GET',
-        // }
-
-        const response = await fetch(url)
-        if (response.ok) {
-            return response.json()
-        } else throw new Error('Access token Expired')
+    // @ts-ignore
+    console.log(JSON.parse(accessToken).value)
+    if (accessToken && JSON.parse(accessToken).value) {
+        if (JSON.parse(accessToken).value.AuthenticationResult) {
+            const url = `${baseUrl}user?access_token=${encodeURIComponent(
+                JSON.parse(accessToken).value.AuthenticationResult.AccessToken,
+            )}`
+            const response = await fetch(url)
+            if (response.ok) {
+                return response.json()
+            } else throw new Error('Access token Expired')
+        } else if (JSON.parse(accessToken).value.AccessToken) {
+            const url = `${baseUrl}user?access_token=${encodeURIComponent(JSON.parse(accessToken).value.AccessToken)}`
+            const response = await fetch(url)
+            if (response.ok) {
+                return response.json()
+            } else throw new Error('Access token Expired')
+        } else {
+            throw new Error('Access Token Not Found')
+        }
     } else {
-        console.log('here')
         throw new Error('Access Token Not Found')
     }
 }

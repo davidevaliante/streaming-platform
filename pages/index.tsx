@@ -14,7 +14,7 @@ interface Itest {}
 
 const test: FunctionComponent<Itest> = ({}) => {
     const router = useRouter()
-    const { signedIn, setSignedIn, checkedAuth, setCheckedAuth } = useContext(AuthContext)
+    const { signedIn, setSignedIn, checkedAuth, setCheckedAuth, setUserInfo } = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -24,9 +24,10 @@ const test: FunctionComponent<Itest> = ({}) => {
     const checkAccessTokenValidity = async () => {
         try {
             const user = await getUser()
+            console.log(user, 'user')
             if (user) {
                 const accessToken = getWithExpiry('session')
-                console.log(JSON.parse(accessToken!))
+                setUserInfo({ channelName: user.UserAttributes[3].Value })
                 setSignedIn(true)
                 // setWithExpiry('session', session, 3600)
             }
@@ -34,7 +35,6 @@ const test: FunctionComponent<Itest> = ({}) => {
             if (error.message === 'Access Token Not Found' || error.message === 'Access Token Expired')
                 setSignedIn(false)
         }
-
         setLoading(false)
     }
 
@@ -48,7 +48,6 @@ const test: FunctionComponent<Itest> = ({}) => {
     return (
         <Layout>
             <Navbar />
-            <Channel />
             <Button style={{ position: 'absolute', bottom: 0, right: 0 }} onClick={signOut}>
                 Sign Out
             </Button>

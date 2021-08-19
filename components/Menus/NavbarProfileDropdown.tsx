@@ -4,12 +4,15 @@ import { linariaTheme } from '../../lib/theme/styled-theme'
 import useOnClickOutside from './../../lib/hooks/useOnClickOutside'
 import { useRouter } from 'next/dist/client/router'
 import { ModalsContext } from '../../lib/context/ModalsOpenContext'
+import { AuthContext } from '../../lib/context/AuthContext'
 
 interface INavbarProfileDropdown {}
 
 const NavbarProfileDropdown: FunctionComponent<INavbarProfileDropdown> = ({}) => {
     const menuRef = useRef(null)
     const router = useRouter()
+    const { userInfo } = useContext(AuthContext)
+    console.log(userInfo)
 
     const { modalsOpen, setModalsOpen } = useContext(ModalsContext)
 
@@ -19,26 +22,41 @@ const NavbarProfileDropdown: FunctionComponent<INavbarProfileDropdown> = ({}) =>
 
     const handleSettings = () => setModalsOpen([...modalsOpen, 'settings'])
 
-    const handleChannelSwitch = () => router.push('/channel/test')
+    const handleChannelSwitch = () => router.push(`/channel/${userInfo.channelName}`)
 
     return (
-        <DropdownContainer ref={menuRef}>
-            <img onClick={() => setMenuOpen(!menuOpen)} src='ico/my-account.svg' />
-            {menuOpen && (
-                <DropDown>
-                    <DropDownItem onClick={() => handleSettings()}>
-                        <p>Settings</p>
-                        <img className='dropdown-icon' src={'/ico/settings.svg'} />
-                    </DropDownItem>
-                    <DropDownItem onClick={() => handleChannelSwitch()}>
-                        <p>Channel</p>
-                        <img className='dropdown-icon' src={'/ico/live-channel.svg'} />
-                    </DropDownItem>
-                </DropDown>
-            )}
-        </DropdownContainer>
+        <Container>
+            <p className='channelName'>{userInfo.channelName}</p>
+            <DropdownContainer ref={menuRef}>
+                <img onClick={() => setMenuOpen(!menuOpen)} src='ico/my-account.svg' />
+                {menuOpen && (
+                    <DropDown>
+                        <DropDownItem onClick={() => handleSettings()}>
+                            <p>Settings</p>
+                            <img className='dropdown-icon' src={'/ico/settings.svg'} />
+                        </DropDownItem>
+                        <DropDownItem onClick={() => handleChannelSwitch()}>
+                            <p>Channel</p>
+                            <img className='dropdown-icon' src={'/ico/live-channel.svg'} />
+                        </DropDownItem>
+                    </DropDown>
+                )}
+            </DropdownContainer>
+        </Container>
     )
 }
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .channelName {
+        color: white;
+        font-weight: 700;
+        margin-right: 1rem;
+    }
+`
 
 const DropDownItem = styled.div`
     display: flex;

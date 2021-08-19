@@ -33,20 +33,18 @@ const Settings: FunctionComponent<ISettings> = ({}) => {
         setLoading(false)
     }
 
-    //acda70d20841.global-contribute.live-video.net
-
-    rtmps: return (
+    return (
         <Dimmer>
             {!loading ? (
                 <Container ref={containerRef}>
                     <h1>Click to copy the String</h1>
-                    <Row onClick={() => navigator.clipboard.writeText(streamKey)}>
-                        <h2>Stream Key</h2>
-                        <p ref={streamKeyRef}>{streamKey}</p>
-                    </Row>
                     <Row onClick={() => navigator.clipboard.writeText(`rtmps://${ingestServer}`)}>
                         <h2>Ingest Server</h2>
                         <p ref={ingestServerRef}>{`rtmps://${ingestServer}`}</p>
+                    </Row>
+                    <Row onClick={() => navigator.clipboard.writeText(streamKey)}>
+                        <h2>Stream Key</h2>
+                        <p ref={streamKeyRef}>{streamKey}</p>
                     </Row>
                 </Container>
             ) : (

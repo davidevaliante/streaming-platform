@@ -17,4 +17,6 @@ const LoaderWrapper = styled.div`
     background: ${linariaTheme.colors.background};
 `
 
+export const SimpleLoader = () => <Loader type='BallTriangle' color='#00BFFF' height={100} width={100} />
+
 export default FullpageLoader

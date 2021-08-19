@@ -1,6 +1,10 @@
 import React, { useState, createContext, useEffect, SetStateAction } from 'react'
 import { FunctionComponent } from 'react'
 
+interface UserInfo {
+    channelName: string
+}
+
 interface AuthContextInterface {
     signedIn: boolean
     setSignedIn: (b: boolean) => void
@@ -8,8 +12,8 @@ interface AuthContextInterface {
     setCheckedAuth: (b: boolean) => void
     auth: any
     setAuth: (a: any) => void
-    userInfo: any
-    setUserInfo: (a: any) => void
+    userInfo: UserInfo
+    setUserInfo: (a: UserInfo) => void
     showSignIn: boolean
     setShowSignIn: (b: boolean) => void
     showSignUp: boolean
@@ -26,7 +30,9 @@ export const AuthContext = createContext<AuthContextInterface>({
     setCheckedAuth: () => {},
     auth: {},
     setAuth: () => {},
-    userInfo: {},
+    userInfo: {
+        channelName: '',
+    },
     setUserInfo: () => {},
     showSignIn: false,
     setShowSignIn: () => {},
@@ -41,7 +47,9 @@ export const AuthContextProvider: FunctionComponent = (props: any) => {
     const [signedIn, _setSignedIn] = useState(false)
     const [checkedAuth, _setCheckedAuth] = useState(false)
     const [auth, _setAuth] = useState<any>({})
-    const [userInfo, _setUserInfo] = useState<any>({})
+    const [userInfo, _setUserInfo] = useState<UserInfo>({
+        channelName: '',
+    })
     const [showSignIn, _setShowSignIn] = useState(false)
     const [showSignUp, _setShowSignUp] = useState(false)
     const [showSettings, _setShowSettings] = useState(false)
